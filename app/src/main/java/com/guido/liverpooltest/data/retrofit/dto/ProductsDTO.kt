@@ -29,10 +29,10 @@ data class Record(
     val skuRepositoryId: String,
     val productDisplayName: String,
     val listPrice: Double,
-    val promoPrice: Double,
-    val smImage: String,
-    val lgImage: String,
-    val xlImage: String,
+    val promoPrice: Double?,
+    val smImage: String?,
+    val lgImage: String?,
+    val xlImage: String?,
     val variantsColor: List<VariantsColor>?
 )
 
@@ -45,8 +45,8 @@ fun ProductsDTO.toDomain() : List<Products> {
     return plpResults.records.map {
         Products(it.productDisplayName,
             it.listPrice,
-            it.promoPrice,
-            it.smImage,
+            it.promoPrice ?: it.listPrice,
+            it.smImage ?: "",
             it.variantsColor)
     }
 }

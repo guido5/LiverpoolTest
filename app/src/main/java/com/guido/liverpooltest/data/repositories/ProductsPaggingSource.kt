@@ -24,7 +24,7 @@ class ProductsPaggingSource @Inject constructor(val services: ApiServices) : Pag
             LoadResult.Page(
                 data = productList,
                 prevKey = if(start == STARTING_KEY) null else start -1,
-                nextKey = if(response.plpResults.plpState.lastRecNum > 10055) null else start + 1       //Se toma 10055 como limite por que despues de eso, aunque pida mas paginas ya no devuelve mas informacion.
+                nextKey = if(response.plpResults.plpState.lastRecNum >= response.plpResults.plpState.totalNumRecs) null else start + 1       //Se toma 10055 como limite por que despues de eso, aunque pida mas paginas ya no devuelve mas informacion.
             )
         } catch (exception: Exception) {
             return LoadResult.Error(exception)
@@ -34,6 +34,4 @@ class ProductsPaggingSource @Inject constructor(val services: ApiServices) : Pag
     override fun getRefreshKey(state: PagingState<Int, Products>): Int? {
        return state.anchorPosition
     }
-
-    private fun ensureValidKey(key: Int) = Integer.max(STARTING_KEY, key)
 }
